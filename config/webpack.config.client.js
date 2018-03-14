@@ -33,13 +33,13 @@ const config = {
     },
     module: {
         rules: [
-            // {
-            //     test: /\.(js|jsx)$/,
-            //     loader: ['babel-loader'],
-            //     exclude: [
-            //         path.join(__dirname, '../node_modules')
-            //     ]
-            // },
+            {
+                test: /\.(js|jsx)$/,
+                loader: ['babel-loader'],
+                exclude: [
+                    path.join(__dirname, '../node_modules')
+                ]
+            },
             {
                 test: /\.(ts|tsx)$/,
                 use: [{

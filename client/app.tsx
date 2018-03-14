@@ -1,6 +1,5 @@
 import * as React from 'react'
-import Button from 'antd/lib/button';
-// import './App.css';
+import { Button } from 'antd';
 
 export interface IState {
     btn_desc: string;
