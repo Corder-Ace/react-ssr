@@ -5,8 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:client": "cross-env NODE_ENV=development webpack-dev-server --config config/webpack.config.client.js",
-    "dev:server": "cross-env NODE_ENV=development node server/app.js",
+    "dev:client": "cross-env --env.NODE_ENV=development webpack-dev-server --config config/webpack.config.client.js",
+    "dev:server": "cross-env NDOE_ENV=development node server/app.js",
     "build:client": "webpack --config config/webpack.config.client.js",
     "build:server": "webpack --config config/webpack.config.server.js",
     "clear": "rimraf dist",
@@ -16,6 +16,8 @@
   "author": "Ace",
   "license": "ISC",
   "dependencies": {
+    "@types/react": "^16.0.40",
+    "@types/react-dom": "^16.0.4",
     "antd": "^3.3.0",
     "autoprefixer": "^8.1.0",
     "axios": "^0.18.0",
@@ -44,12 +46,17 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "rimraf": "^2.6.2",
+    "source-map-loader": "^0.2.3",
     "style-loader": "^0.20.2",
+    "ts-import-plugin": "^1.4.4",
+    "ts-loader": "^4.0.1",
+    "typescript": "^2.7.2",
     "webpack": "^4.0.1",
     "webpack-dev-server": "^3.1.1"
   },
   "devDependencies": {
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
+    "react-app-rewired": "^1.5.0",
     "webpack-cli": "^2.0.10"
   }
 }

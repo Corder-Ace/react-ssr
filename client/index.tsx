@@ -1,11 +1,11 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from './app.js'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import App from './app'
 
 
-if (typeof window !== 'undefined'){
+// if (typeof window !== 'undefined') {
     ReactDOM.hydrate(<App />, document.querySelector('#root'))
-}
+// }
 
 // const root = document.querySelector('#root')
 // const render = Component => {

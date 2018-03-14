@@ -42,7 +42,7 @@ serverCompiler.watch({}, (err, stats) => {
 
 module.exports = function (app) {
     app.use(proxy('http://localhost', {
-        port: 8080
+        port: 8888
     }))
 
     router.get('*', async (ctx, next) => {

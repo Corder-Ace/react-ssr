@@ -3,8 +3,9 @@ const webpack = require('webpack')
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const tsImportPluginFactory = require('ts-import-plugin');
 const extractLESS = new ExtractTextPlugin('stylesheets/[name]-two.css');
-const isDev = process.env.NDOE_ENV === 'development'
+const isDev = process.env.NODE_ENV === 'development'
 const paths = require('./paths');
 const publicPath = paths.servedPath;
 const shouldUseRelativeAssetPaths = publicPath === './';
@@ -16,32 +17,49 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths ?
         publicPath: Array(cssFilename.split('/').length).join('../')
     } :
     {};
-    
+
 const config = {
     devtool: 'cheap-module-source-map',
     entry: {
-        app: path.join(__dirname, '../client/index.js')
+        app: path.join(__dirname, '../client/index.tsx')
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
         filename: '[name].[hash].js',
         publicPath: ''
     },
+    resolve: {
+        extensions: [".ts", ".tsx", ".js", ".json"]
+    },
     module: {
         rules: [
+            // {
+            //     test: /\.(js|jsx)$/,
+            //     loader: ['babel-loader'],
+            //     exclude: [
+            //         path.join(__dirname, '../node_modules')
+            //     ]
+            // },
             {
-                test: /\.(js|jsx)$/,
-                loader: ['babel-loader'],
+                test: /\.(ts|tsx)$/,
+                use: [{
+                    loader: 'ts-loader', 
+                    options: {
+                        getCustomTransformers: () => ({
+                            before: [tsImportPluginFactory({
+                                libraryName: 'antd',
+                                libraryDirectory: 'es',
+                                style: 'css',
+                            })]
+                        })
+                    }
+                }],
                 exclude: [
                     path.join(__dirname, '../node_modules')
                 ]
             },
             {
                 test: /\.css$/,
-                // use: ExtractTextPlugin.extract({
-                //     fallback: "style-loader",
-                //     use: "css-loader"
-                // })
                 loader: ExtractTextPlugin.extract(Object.assign({
                     fallback: {
                         loader: require.resolve('style-loader'),
@@ -75,24 +93,14 @@ const config = {
                     }]
                 }, extractTextPluginOptions)),
             },
-            {
-                test: /\.less$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    //resolve-url-loader may be chained before sass-loader if necessary
-                    use: ['css-loader', 'less-loader']
-                })
-                // use: [
-                //     { loader: 'style-loader' },
-                //     {
-                //         loader: 'css-loader',
-                //         options: {
-                //             modules: true
-                //         }
-                //     },
-                //     { loader: 'less-loader' }
-                // ]
-            }
+            // {
+            //     test: /\.less$/,
+            //     use: ExtractTextPlugin.extract({
+            //         fallback: 'style-loader',
+            //         //resolve-url-loader may be chained before sass-loader if necessary
+            //         use: ['css-loader', 'less-loader']
+            //     })
+            // }
         ]
     },
     plugins: [
@@ -102,12 +110,12 @@ const config = {
         new ExtractTextPlugin("[name].css"),
     ]
 }
-
-if (isDev) {
+console.log(isDev)
+if (!isDev) {
     config.devServer = {
         host: '0.0.0.0',
         port: 8888,
-        inline:true,
+        inline: true,
         contentBase: path.resolve(__dirname, '../dist'),
         hot: true,//热更新
         overlay: {
@@ -119,12 +127,12 @@ if (isDev) {
         // }
     }
 
-    config.plugins.push(new webpack.HotModuleReplacementPlugin())
-    config.entry = {
-        app: [
-            'react-hot-loader/patch',
-            path.join(__dirname, '../client/index.js')
-        ]
-    }
+    // config.plugins.push(new webpack.HotModuleReplacementPlugin())
+    // config.entry = {
+    //     app: [
+    //         'react-hot-loader/patch',
+    //         path.join(__dirname, '../client/index.js')
+    //     ]
+    // }
 }
 module.exports = config
