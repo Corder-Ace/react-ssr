@@ -111,28 +111,28 @@ const config = {
     ]
 }
 console.log(isDev)
-if (!isDev) {
+if (isDev) {
     config.devServer = {
         host: '0.0.0.0',
         port: 8888,
         inline: true,
         contentBase: path.resolve(__dirname, '../dist'),
-        hot: true,//热更新
+        // hot: true,//热更新
         overlay: {
             errors: true,//错误信息提示
         },
-        // publicPath:'',
-        // historyApiFallback:{
-        //     index:''
-        // }
+        publicPath:'',
+        historyApiFallback:{
+            index:''
+        }
     }
 
-    // config.plugins.push(new webpack.HotModuleReplacementPlugin())
-    // config.entry = {
-    //     app: [
-    //         'react-hot-loader/patch',
-    //         path.join(__dirname, '../client/index.js')
-    //     ]
-    // }
+    config.plugins.push(new webpack.HotModuleReplacementPlugin())
+    config.entry = {
+        app: [
+            'react-hot-loader/patch',
+            path.join(__dirname, '../client/index.tsx')
+        ]
+    }
 }
 module.exports = config

@@ -3,6 +3,7 @@ const webpack = require('webpack')
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
+const tsImportPluginFactory = require('ts-import-plugin');
 const extractLESS = new ExtractTextPlugin('stylesheets/[name]-two.css');
 const isDev = process.env.NDOE_ENV === 'development'
 const paths = require('./paths');
@@ -17,7 +18,7 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths ?
     } :
     {};
 module.exports = {
-    target:'node',
+    target: 'node',
     devtool: 'cheap-module-source-map',
     entry: {
         app: path.join(__dirname, '../client/server-entry.js')
@@ -26,13 +27,34 @@ module.exports = {
         path: path.resolve(__dirname, '../dist'),
         filename: 'server-entry.js',
         publicPath: '',
-        libraryTarget:'commonjs2'
+        libraryTarget: 'commonjs2'
+    },
+    resolve: {
+        extensions: [".ts", ".tsx", ".js", ".json"]
     },
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,
                 loader: 'babel-loader',
+                exclude: [
+                    path.join(__dirname, '../node_modules')
+                ]
+            },
+            {
+                test: /\.(ts|tsx)$/,
+                use: [{
+                    loader: 'ts-loader',
+                    options: {
+                        getCustomTransformers: () => ({
+                            before: [tsImportPluginFactory({
+                                libraryName: 'antd',
+                                libraryDirectory: 'es',
+                                style: 'css',
+                            })]
+                        })
+                    }
+                }],
                 exclude: [
                     path.join(__dirname, '../node_modules')
                 ]

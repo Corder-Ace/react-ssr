@@ -6,7 +6,7 @@ export interface IState {
 }
 class App extends React.Component<{}, IState> {
     state = {
-        btn_desc: '1234'
+        btn_desc: '1234567'
     }
     render() {
         return (

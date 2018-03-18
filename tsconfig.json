@@ -8,6 +8,9 @@
         "jsx": "react",
         "moduleResolution":"node",
         "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": false,
+        "experimentalDecorators": true,
+        "allowJs": true,
     },
     "include": [
         "./client/**/*"

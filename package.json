@@ -2,16 +2,16 @@
   "name": "react-ssr",
   "version": "1.0.0",
   "description": "react-ssr-app",
-  "main": "app.js",
+  "main": "index.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev:client": "cross-env --env.NODE_ENV=development webpack-dev-server --config config/webpack.config.client.js",
-    "dev:server": "cross-env NDOE_ENV=development node server/app.js",
+    "dev:server": "cross-env NODE_ENV=dev node server/app.js",
     "build:client": "webpack --config config/webpack.config.client.js",
     "build:server": "webpack --config config/webpack.config.server.js",
     "clear": "rimraf dist",
     "build": "npm run clear && npm run build:client && npm run build:server",
-    "start": "node server/app.js"
+    "start": "cross-env NODE_ENV=production node server/app.js"
   },
   "author": "Ace",
   "license": "ISC",
@@ -36,11 +36,17 @@
     "html-webpack-plugin": "^3.0.4",
     "koa": "^2.5.0",
     "koa-better-http-proxy": "^0.2.4",
+    "koa-bodyparser": "^4.2.0",
+    "koa-json": "^2.0.2",
     "koa-router": "^7.4.0",
     "koa-static": "^4.0.2",
     "less": "^3.0.1",
     "less-loader": "^4.0.6",
+    "md5": "^2.2.1",
     "memory-fs": "^0.4.1",
+    "mobx": "^4.1.0",
+    "mobx-react": "^5.0.0",
+    "mysql": "^2.15.0",
     "postcss-flexbugs-fixes": "^3.3.0",
     "postcss-loader": "^2.1.1",
     "react": "^16.2.0",
@@ -55,6 +61,7 @@
     "webpack-dev-server": "^3.1.1"
   },
   "devDependencies": {
+    "cross-env": "^5.1.4",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "react-app-rewired": "^1.5.0",
     "webpack-cli": "^2.0.10"
