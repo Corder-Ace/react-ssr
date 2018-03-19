@@ -32,9 +32,10 @@ const insertUser = (account,password) =>{
     let _sql = `insert into user_info(account,password,email,nick_name) values(?,?,?,?)`
     return query(_sql)
 }
+
 //登录认证
 const findUserByAccount = (account) => {
-    let _sql = `select * from user_info where account=${account}`
+    let _sql = `select * from user_info where account="${account}"`
     return query(_sql)
 }
 

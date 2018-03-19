@@ -3,7 +3,7 @@ const config = {
     port: 3000,
 
     database: {
-        DATABASE: 'communityl',
+        DATABASE: 'community',
         USERNAME: 'root',
         PASSWORD: '949223',
         PORT: '3306',

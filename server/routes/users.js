@@ -1,6 +1,7 @@
 const router = require('koa-router')()
 const userModel = require('../lib/mysql');
 const md5 = require('md5');
+const { createToken } = require('./../util/token')
 router.prefix('/users')
 
 //注册
@@ -31,9 +32,17 @@ router.post('/login', async (ctx, next) => {
     }
 
     await userModel.findUserByAccount(data.account).then(res => {
-        if (res.length) {
-            if (data.password === res[0].password) {
-
+        let user = res[0]
+        if (user) {
+            if (data.password === user.password) {
+                ctx.body = {
+                    code: 200,
+                    result: {
+                        token: createToken(user),
+                        permissions: user.permissions,
+                        nick_name: user.nick_name
+                    }
+                }
             } else (
                 ctx.body = {
                     code: 401,
@@ -42,7 +51,7 @@ router.post('/login', async (ctx, next) => {
             )
         } else {
             ctx.body = {
-                code: 402,
+                code: 403,
                 meesage: '此用户不存在'
             }
         }
