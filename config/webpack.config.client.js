@@ -25,11 +25,12 @@ const config = {
     },
     output: {
         path: path.resolve(__dirname, '../dist'),
-        filename: '[name].[hash].js',
+        filename: 'static/js/[name].[hash].js',
+        chunkFilename: 'static/js/[name].[hash].chunk.js',
         publicPath: ''
     },
     resolve: {
-        extensions: [".ts", ".tsx", ".js", ".json"]
+        extensions: [".ts", ".tsx", ".js", ".json", ".scss"]
     },
     module: {
         rules: [
@@ -43,7 +44,7 @@ const config = {
             {
                 test: /\.(ts|tsx)$/,
                 use: [{
-                    loader: 'ts-loader', 
+                    loader: 'ts-loader',
                     options: {
                         getCustomTransformers: () => ({
                             before: [tsImportPluginFactory({
@@ -93,21 +94,43 @@ const config = {
                     }]
                 }, extractTextPluginOptions)),
             },
-            // {
-            //     test: /\.less$/,
-            //     use: ExtractTextPlugin.extract({
-            //         fallback: 'style-loader',
-            //         //resolve-url-loader may be chained before sass-loader if necessary
-            //         use: ['css-loader', 'less-loader']
-            //     })
-            // }
+            {
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    //resolve-url-loader may be chained before sass-loader if necessary
+                    use: [{
+                        loader: 'typings-for-css-modules-loader',
+                        options: {
+                            modules: true,
+                            namedExport: true,
+                            camelCase: true,
+                            minimize: true,
+                            localIdentName: "[local]_[hash:base64:5]"
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            outputStyle: 'expanded',
+                            sourceMap: true
+                        }
+                    }]
+                })
+            }
         ]
     },
     plugins: [
         new HtmlWebpackPlugin({
+            inject: true,
             template: path.join(__dirname, '../client/template.html'),
         }),
-        new ExtractTextPlugin("[name].css"),
+        new ExtractTextPlugin({
+            filename: (getPath) => {
+                return getPath('/static/css/[name].css').replace('css/js','css');
+            },
+            allChunks: true
+        }),
     ]
 }
 console.log(isDev)
@@ -121,9 +144,14 @@ if (isDev) {
         overlay: {
             errors: true,//错误信息提示
         },
-        publicPath:'',
-        historyApiFallback:{
-            index:''
+        publicPath: '',
+        historyApiFallback: {
+            index: ''
+        },
+        proxy: {
+            '/users/*': {
+                target: 'http://localhost:3000'
+            }
         }
     }
 

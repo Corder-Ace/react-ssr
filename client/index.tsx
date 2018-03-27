@@ -1,12 +1,18 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { AppContainer } from 'react-hot-loader'
-import {Provider} from 'mobx-react'
+import { Provider } from 'mobx-react'
 import appState from './store/store.js'
+import Index from './route/index'
 import App from './app'
 
 
-ReactDOM.hydrate(<App />, document.querySelector('#root'))
+ReactDOM.hydrate(
+    <BrowserRouter>
+        <Index />
+    </BrowserRouter>
+    , document.querySelector('#root'))
 
 // public Component:any
 // const root = document.querySelector('#root')
