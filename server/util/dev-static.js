@@ -8,6 +8,7 @@ const reactDomServer = require('react-dom/server')
 const path = require('path')
 const proxy = require('koa-better-http-proxy');
 
+//获取模板文件
 const getTemplate = () => {
     return new Promise((resolve, reject) => {
         axios.get('http://localhost:8080/index.html')
@@ -18,7 +19,7 @@ const getTemplate = () => {
         .catch(reject)
 }
 
-let serverBundle
+let serverBundle, createStoreMap
 const Module = module.constructor
 const mfs = new MemoryFs
 const serverCompiler = webpack(serverConfig)
@@ -37,7 +38,8 @@ serverCompiler.watch({}, (err, stats) => {
     const bundle = mfs.readFileSync(bundlePath, 'utf-8')
     const m = new Module()
     m._compile(bundle, 'server-entry.js')
-    serverBundle = m.exports.default
+    serverBundle = m.exports.default //获取dom
+    createStoreMap = m.exports.createStoreMap //获取mobx
 })
 
 module.exports = function (app) {
@@ -47,7 +49,9 @@ module.exports = function (app) {
 
     router.get('*', async (ctx, next) => {
         getTemplate.then(template => {
-            const content = ReactDOMServer.renderToString(serverBundle)
+            const routerContext = {}
+            const app = serverBundle(createStoreMap(), routerContext, req.url)
+            const content = ReactDOMServer.renderToString(app)
             res.send(template.replace('<!-- app -->', content))
         })
     })

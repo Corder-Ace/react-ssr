@@ -5,7 +5,7 @@
   "main": "index.tsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev:client": "cross-env --env.NODE_ENV=development webpack-dev-server --config config/webpack.config.client.js",
+    "dev:client": "webpack-dev-server --mode development --config config/webpack.config.client.js",
     "dev:server": "cross-env NODE_ENV=dev node server/app.js",
     "build:client": "webpack --config config/webpack.config.client.js",
     "build:server": "webpack --config config/webpack.config.server.js",
