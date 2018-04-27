@@ -6,16 +6,21 @@
         "module": "es6",
         "target": "es5",
         "jsx": "react",
-        "moduleResolution":"node",
+        "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
-        "forceConsistentCasingInFileNames": false,
+        "forceConsistentCasingInFileNames": true,
         "experimentalDecorators": true,
         "allowJs": true,
+        "baseUrl": ".",
+        "paths": {
+            "components/*":[
+                "./client/src/components/*"
+            ]
+        }
     },
-    "include": [
-        "./client/**/*"
-    ],
     "exclude": [
-        "node_modules"
+        "node_modules",
+        "webpack",
+        "dist",
     ]
 }

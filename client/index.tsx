@@ -3,12 +3,13 @@ import * as ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { AppContainer } from 'react-hot-loader'
 import { Provider } from 'mobx-react'
-import appState from './store/store'
-import Index from './route/index'
+import appState from './src/store/store'
+import Index from './src/route/index'
 import App from './app'
+import './src/static/css/base.scss'
 
-
-ReactDOM.hydrate(
+const renderMethod = process.env.NODE_ENV === 'development' ? ReactDOM.render : ReactDOM.hydrate
+renderMethod(
     <Provider appState={new appState()}>
         <BrowserRouter>
             <Index />
