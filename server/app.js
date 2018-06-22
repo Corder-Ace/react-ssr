@@ -34,8 +34,11 @@ if (!isDev) {
     }))
     app.use(response_formatter)
     app.use(users.routes(), users.allowedMethods())
+    // app.use(index.routes(), index.allowedMethods())
     const devStatic = require('./util/dev-static')(app)
 }
 
-app.listen(3000)
+app.listen(3000, function () {
+    console.log('服务已经启动')
+})
 

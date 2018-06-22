@@ -6,8 +6,8 @@ import Cookies from 'js-cookie'
 import * as Styles from './index.scss'
 
 export interface LoginState {
-    account: String,
-    password: String,
+    account: string,
+    password: string,
     loading: boolean
 }
 

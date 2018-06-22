@@ -1,0 +1,40 @@
+@import '../../static/css/layout.scss';
+
+.viewNav{
+    width: 100%;
+    position: fixed;
+    left: 0;
+    top: 59px;
+    height: 45px;
+    z-index: 100;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.05);
+    transition: all .2s;
+    transform: translateZ(0);
+    background-color:#fff;
+    &::before{
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 200%;
+        z-index: -1;
+        left: 0;
+        background-color: #fff;
+    }
+    .nav-list{
+        @include flex(row);
+        width: 100%;
+        max-width: 960px;
+        margin: auto;
+    }
+
+    .nav-item{
+        line-height: 44px;
+        font-size: 14px;
+        padding: 0 20px 0 0;
+    }
+}
+
+.top{
+    transform: translate3d(0,-59px,0);
+}

@@ -8,10 +8,12 @@ class App extends React.Component<{}, IState> {
     state = {
         btn_desc: '1234567'
     }
+
     render() {
+        const { btn_desc } = this.state
         return (
             <div>
-                <Button type="primary">{this.state.btn_desc}</Button>
+                <Button type="primary">{btn_desc}</Button>
                 {/* <h1>123213</h1> */}
             </div>
         )

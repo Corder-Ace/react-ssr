@@ -11,7 +11,7 @@ const proxy = require('koa-better-http-proxy');
 //获取模板文件
 const getTemplate = () => {
     return new Promise((resolve, reject) => {
-        axios.get('http://localhost:8080/index.html')
+        axios.get('http://localhost:8888/index.html')
     })
         .then(res => {
             resolve(res.data)
@@ -51,7 +51,9 @@ module.exports = function (app) {
         getTemplate.then(template => {
             const routerContext = {}
             const app = serverBundle(createStoreMap(), routerContext, req.url)
+            console.log(app)
             const content = ReactDOMServer.renderToString(app)
+            console.log(content)
             res.send(template.replace('<!-- app -->', content))
         })
     })

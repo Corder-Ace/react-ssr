@@ -1,14 +1,16 @@
-const path = require('path')
-const webpack = require('webpack')
+const path = require('path');
+const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 const tsImportPluginFactory = require('ts-import-plugin');
-const extractLESS = new ExtractTextPlugin('stylesheets/[name]-two.css');
-const isDev = process.env.NODE_ENV === 'development'
-const paths = require('./paths');
-const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 
+const isDev = process.env.NODE_ENV === 'development'
+const extractLESS = new ExtractTextPlugin('stylesheets/[name]-two.css');
+const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
 module.exports = (env, argv) => {
     let config = {
         devtool: 'cheap-module-source-map',
@@ -26,12 +28,12 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, '../dist'),
             filename: 'static/js/[name].[hash].js',
             chunkFilename: 'static/js/[name].[chunkhash].js',
-            publicPath:''
+            publicPath: '/'
         },
         resolve: {
             extensions: [".ts", ".tsx", ".js", ".json", ".scss"],
-            alias:{
-                "components":path.resolve(__dirname,'../client/src/components/')
+            alias: {
+                "components": path.resolve(__dirname, '../client/src/components/')
             }
         },
         optimization: {
@@ -133,10 +135,10 @@ module.exports = (env, argv) => {
                     }]
                 },
                 {
-                    oneOf:[
+                    oneOf: [
                         {
                             loader: require.resolve('file-loader'),
-        
+
                             options: {
                                 name: 'static/media/[name].[hash:8].[ext]'
                             },
@@ -160,7 +162,7 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new HtmlWebpackPlugin({
-                template: path.join(__dirname, '../client/template.html'),
+                template: path.join(__dirname, '../public/index.html'),
                 //对html进行压缩
                 minify: {
                     collapseWhitespace: true,
@@ -172,11 +174,17 @@ module.exports = (env, argv) => {
             }),
             new ExtractTextPlugin({
                 filename: (getPath) => {
-                    return getPath('/static/css/[name].css').replace('css/js', 'css');
+                    return getPath('static/css/[name].css').replace('css/js', 'css');
                 },
                 allChunks: true
             }),
-        ]
+            new ManifestPlugin({
+                fileName: 'asset-manifest.json',
+            })
+        ],
+        performance: {
+            hints: "warning"
+        }
     }
 
     if (argv.mode === 'development') {
@@ -192,6 +200,8 @@ module.exports = (env, argv) => {
             overlay: {
                 errors: true,//错误信息提示
             },
+            stats: "errors-only",
+            compress: true,
             historyApiFallback: {
                 index: ''
             },
@@ -203,12 +213,12 @@ module.exports = (env, argv) => {
         }
 
         config.plugins.push(new webpack.HotModuleReplacementPlugin())
-        // config.entry = {
-        //     app: [
-        //         'react-hot-loader/patch',
-        //         path.join(__dirname, '../client/index.tsx')
-        //     ]
-        // }
+    } else {
+        config.plugins.push(
+            new CleanWebpackPlugin(['dist/*'], {
+                root: path.join(__dirname, '..'),
+            }),
+            new CopyWebpackPlugin([{ from: 'public', to: '' }]))
     }
     return config
 }
