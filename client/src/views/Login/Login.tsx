@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Input, Button } from 'antd'
 import Api from '../../api/api'
 import { Link } from 'react-router-dom'
-import Cookies from 'js-cookie'
+// import Cookies from 'js-cookie'
 import * as Styles from './index.scss'
 
 export interface LoginState {
@@ -43,7 +43,7 @@ class Login extends React.PureComponent<any, LoginState>{
         Api.login(obj)
             .then(res => {
                 if (res.code == 200) {
-                    Cookies.set('token', res.result.token)
+                    // Cookies.set('token', res.result.token)
                     this.setState({ loading: false })
                 }
             })
