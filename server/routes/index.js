@@ -2,7 +2,7 @@ const router = require('koa-router')()
 const ReactSSR = require('react-dom/server')
 const fs = require('fs')
 const path = require('path')
-const serverEntry = require('../../dist/server-entry').default
+const serverEntry = require('../../dist/server-entry.js').default
 const template = fs.readFileSync(path.resolve(__dirname, '../../dist/index.html'), 'utf8')
 
 

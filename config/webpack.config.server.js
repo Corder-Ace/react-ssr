@@ -17,7 +17,9 @@ const extractTextPluginOptions = shouldUseRelativeAssetPaths ?
         publicPath: Array(cssFilename.split('/').length).join('../')
     } :
     {};
+console.log(Object.keys(require('../package.json').dependencies))
 module.exports = {
+    mode:'development',
     target: 'node',
     devtool: 'cheap-module-source-map',
     entry: {
@@ -29,6 +31,7 @@ module.exports = {
         publicPath: '',
         libraryTarget: 'commonjs2'
     },
+    externals:Object.keys(require('../package.json').dependencies),
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"]
     },

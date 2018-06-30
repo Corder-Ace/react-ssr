@@ -23,6 +23,20 @@ let serverBundle, createStoreMap
 const Module = module.constructor
 const mfs = new MemoryFs
 const serverCompiler = webpack(serverConfig)
+const NativeModule = require('module');
+const vm = require('vm');
+
+const getModuleFromString = (bundle, filename) => {
+    const m = { exports: {} }
+    const wrapper = NativeModule.wrap(bundle)
+    const script = new vm.Script(wrapper, {
+        filename: filename,
+        displayErrors: true,
+    })
+    const result = script.runInThisContext()
+    result.call(m.exports, m.exports, require, m)
+    return m
+}
 
 serverCompiler.outputFileSystem = mfs
 serverCompiler.watch({}, (err, stats) => {
@@ -36,8 +50,9 @@ serverCompiler.watch({}, (err, stats) => {
         serverConfig.output.filename)
 
     const bundle = mfs.readFileSync(bundlePath, 'utf-8')
-    const m = new Module()
-    m._compile(bundle, 'server-entry.js')
+    // const m = new Module()
+    // m._compile(bundle, 'server-entry.js')
+    const m = getModuleFromString(bundle,'server-entry.js')
     serverBundle = m.exports.default //获取dom
     createStoreMap = m.exports.createStoreMap //获取mobx
 })

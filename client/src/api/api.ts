@@ -1,6 +1,7 @@
 import axios from 'axios'
 import * as urls from './urls'
 
+let Api
 const common = async (method: string, url: string, data: object) => {
     try {
         const response = await axios({
@@ -15,4 +16,6 @@ const common = async (method: string, url: string, data: object) => {
     }
 }
 
-export const login = (data: object) => common('post', urls.login, data)
+export default Api = {
+    login: (data: object) => common('post', urls.login, data)
+}

@@ -1,17 +1,17 @@
 import * as React from 'react'
 import { Input, Button } from 'antd'
-import { login } from '../../api/api'
+import Api from '../../api/api'
 import { Link } from 'react-router-dom'
 import Cookies from 'js-cookie'
 import * as Styles from './index.scss'
 
 export interface LoginState {
-    account: string,
-    password: string,
-    loading: boolean
+    account?: string,
+    password?: string,
+    loading?: boolean
 }
 
-class Login extends React.PureComponent<{}, LoginState>{
+class Login extends React.PureComponent<any, LoginState>{
     constructor(props: any) {
         super(props)
 
@@ -40,7 +40,7 @@ class Login extends React.PureComponent<{}, LoginState>{
 
     //login api
     _login(obj: object) {
-        login(obj)
+        Api.login(obj)
             .then(res => {
                 if (res.code == 200) {
                     Cookies.set('token', res.result.token)
@@ -48,7 +48,7 @@ class Login extends React.PureComponent<{}, LoginState>{
                 }
             })
     }
-    
+
     render() {
         const { loading } = this.state
         return (
