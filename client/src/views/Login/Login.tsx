@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Input, Button } from 'antd'
 import Api from '../../api/api'
 import { Link } from 'react-router-dom'
-import * as Cookies from 'js-cookie'
+import Cookies from 'js-cookie'
 import * as Styles from './index.scss'
 
 export interface LoginState {

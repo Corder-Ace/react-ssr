@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "js-cookie": "registry:dt/js-cookie#2.0.0+20160620211513"
+  }
+}
