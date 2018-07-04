@@ -201,7 +201,7 @@ module.exports = (env, argv) => {
 			}),
 			new ExtractTextPlugin({
 				filename: (getPath) => {
-					return getPath('static/css/[name].[hash].css')
+					return getPath('static/css/[name].[chunkhash].css')
                 },
                 // filename:'',
 				allChunks: true
